@@ -1,3 +1,7 @@
+from collections import defaultdict
+from constants import *
+from helpers import *
+
 def get_fainted_counts(timeline):
     """Scans a timeline and returns the KOs counters for p1 and p2."""
     p1_fainted_names = set()
