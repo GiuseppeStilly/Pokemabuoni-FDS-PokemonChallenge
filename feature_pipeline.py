@@ -292,4 +292,93 @@ def compute_moveset_features(battle):
     features['boost_move_advantage_strategy'] = p1_boost_count - p2_boost_count
 
     return features
+# --- Define global maps (will be populated by training mode) ---
+pokemon_type_map = {}
+pokemon_stats = {}
+observed_moves_map = {}
+move_to_type_map = {}
 
+def create_dataset(data, is_training=True):
+    """
+    Runs the full pre-processing and feature engineering pipeline.
+    Handles both training and submission data.
+    
+    Parameters:
+    - data (list): The raw battle data (train_data or test_data)
+    - is_training (bool): If True, creates maps and splits X/y.
+                      If False, reuses maps and returns X_test and IDs.
+                      
+    Returns:
+    - (X_processed, y) if is_training=True
+    - (X_processed_test, battle_ids_list) if is_training=False
+    """
+    
+    global pokemon_type_map, pokemon_stats, observed_moves_map, move_to_type_map
+    
+    # --- 1. Pre-processing (Build mapping dicts) ---
+    if is_training:
+        print("Running pre-processing (Training Mode)...")
+        # Populate the global maps using training data
+        pokemon_type_map = type_map(data)
+        pokemon_stats = pokemon_win_rate(pokemon_type_map, data)
+        observed_moves_map, move_to_type_map = build_observed_moveset_map(data)
+    else:
+        print("Running pre-processing (Test Mode)...")
+        # Check if maps exist (created during training)
+        if 'pokemon_type_map' not in globals() or 'observed_moves_map' not in globals():
+            raise ValueError("Maps not found. Run create_dataset(train_data, is_training=True) first.")
+    
+    # --- 2. Main Feature Engineering Loop ---
+    print(f"\nStarting Main Feature Engineering Loop for {len(data)} battles...")
+    processed_data_list = []
+    battle_ids_list = [] # Needed for submission
+    
+    for battle in data:
+        # Pass the global maps to each function
+        features = process_battle_base(battle, pokemon_type_map, pokemon_stats)
+        strategic_features = compute_strategic_features(battle, pokemon_type_map)
+        features.update(strategic_features)
+        choice_features = compute_choice_features(battle)
+        features.update(choice_features)
+        endgame_features = compute_endgame_features(
+            battle, 
+            pokemon_type_map, 
+            observed_moves_map, 
+            move_to_type_map
+        )
+        features.update(endgame_features)
+        
+        moveset_features = compute_moveset_features(battle)
+        features.update(moveset_features)
+        
+        if 'battle_id' in battle:
+            features['battle_id'] = battle['battle_id']
+            if not is_training:
+                battle_ids_list.append(battle['battle_id']) 
+            
+        processed_data_list.append(features)
+
+    print("Feature engineering complete.")
+
+    # --- 3. Final DataFrame Creation ---
+    df = pd.DataFrame(processed_data_list)
+
+    if is_training:
+        df_clean = df.dropna(subset=['player_won'])
+        X = df_clean.drop(['player_won', 'battle_id'], axis=1, errors='ignore')
+        y = df_clean['player_won'].astype(int)
+        
+        categorical_cols = ['t30_p1_status', 't30_p2_status'] 
+        X_processed = pd.get_dummies(X, columns=categorical_cols, drop_first=True)
+        
+        print(f"\nFinal Training DataFrame created with {X_processed.shape[1]} features.")
+        return X_processed, y
+        
+    else:
+        # For test data
+        X_test = df.drop(['player_won', 'battle_id'], axis=1, errors='ignore')
+        categorical_cols = ['t30_p1_status', 't30_p2_status'] 
+        X_processed_test = pd.get_dummies(X_test, columns=categorical_cols, drop_first=True)
+        
+        print(f"\nFinal Test DataFrame created with {X_processed_test.shape[1]} features.")
+        return X_processed_test, battle_ids_list
