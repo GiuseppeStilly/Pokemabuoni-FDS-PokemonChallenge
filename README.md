@@ -1,6 +1,6 @@
 # POKEMABUONI TEAM
 # FDS 2025 - Pokémon Battle Prediction
-
+![](images/1_j7dwLFVWjLVRPQFTjMsmgg.jpg)
 This repository contains the source code (toolbox) for the FDS Pokémon Battles Prediction 2025 Kaggle competition.
 
 The goal is to predict the winner of a Pokémon battle (Player 1 vs. Player 2) given the timeline data from the first 30 turns.
