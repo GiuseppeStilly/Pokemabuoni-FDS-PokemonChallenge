@@ -1,4 +1,6 @@
 # POKEMABUONI TEAM
+![Can't load the image](images/logo.png)
+
 # FDS 2025 - Pokémon Battle Prediction
 
 This repository contains the source code (toolbox) for the FDS Pokémon Battles Prediction 2025 Kaggle competition.
