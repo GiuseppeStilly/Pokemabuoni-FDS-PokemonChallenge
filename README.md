@@ -1,5 +1,4 @@
 # POKEMABUONI TEAM
-![Can't load the image](images/logo.png)
 
 # FDS 2025 - Pokémon Battle Prediction
 Team composition: Giuseppe Stillitano, Edoardo Besteghi, Riccardo Bucchi
