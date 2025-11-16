@@ -57,7 +57,7 @@ The third pillar is the **tresillo**, an Afro-Cuban rhythmic pattern based on sy
 Now found everywhere—from pop to jazz (as in *Un Poco Loco Jazz Orchestra*)—it appears in several battle themes.  
 Its uneven push gives continuous forward motion, making the listener feel that something is always about to happen.
 
-> 🎵 Together, these musical choices turn Pokémon battles into living, breathing performances—mirroring the adrenaline of real competition.
+> Together, these musical choices turn Pokémon battles into living, breathing performances—mirroring the adrenaline of real competition.
 
 ---
 
