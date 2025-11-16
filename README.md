@@ -62,8 +62,6 @@ Its uneven push gives continuous forward motion, making the listener feel that s
 
 ---
 
-<p align="center">
-  <img src="images/pokemon_music.avif" alt="Pokémon Music Bonus" width="600"/><br><br>
 
   <audio controls>
     <source src="images/musicapokemon.mp3" type="audio/mpeg">
