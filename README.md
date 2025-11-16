@@ -42,6 +42,7 @@ The final notebook trains three distinct models for submission, as required by t
 * **`model_pipeline.py`**:
     Contains the three high-level functions (`run_model_1_...`, `run_model_2_...`, `run_model_3_...`) that define, train, and evaluate the final submission models.
 ---
+![Pokémon Music Bonus](images/pokemon_music.avif)
 
 ## Bonus – *FROM CLASSICAL MUSIC TO FLAMENCO: Pokémon Music*
 
